@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-text font-sans antialiased;
+  }
+}
+
+.breathing-circle {
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(96,165,250,1) 0%, rgba(74,222,128,0.5) 100%);
+  filter: blur(10px);
+}

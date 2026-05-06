@@ -1,0 +1,44 @@
+# ─── Dependencies ────────────────────────────────────────
+node_modules/
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# ─── Environment / Secrets ───────────────────────────────
+.env
+.env.local
+.env.production
+.env.*.local
+
+# ─── Build Artifacts ─────────────────────────────────────
+dist/
+build/
+*.egg-info/
+*.egg
+
+# ─── IDE / Editor ────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── OS ──────────────────────────────────────────────────
+*.log
+npm-debug.log*
+
+# ─── Python Model Cache ─────────────────────────────────
+*.h5
+*.pt
+*.bin
+*.onnx
+.cache/
+huggingface/
+
+# ─── Misc ────────────────────────────────────────────────
+.gemini/

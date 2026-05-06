@@ -1,0 +1,31 @@
+# ─────────────────────────────────────────────────────────────
+# MindTrace AI+ — Python Dependencies
+# ─────────────────────────────────────────────────────────────
+
+# Core framework
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0
+
+# Async MongoDB driver
+motor>=3.4.0
+pymongo>=4.7.0
+
+# Data validation
+pydantic[email]>=2.7.0
+pydantic-settings>=2.3.0
+
+# Authentication
+PyJWT>=2.8.0
+passlib[bcrypt]>=1.7.4
+bcrypt>=4.1.0
+
+# AI / NLP (structured for HuggingFace pipeline)
+transformers>=4.41.0
+torch>=2.3.0
+
+# Email (mocked, but dependency included for prod swap)
+aiosmtplib>=3.0.0
+
+# Utilities
+python-dotenv>=1.0.1
+python-multipart>=0.0.9
