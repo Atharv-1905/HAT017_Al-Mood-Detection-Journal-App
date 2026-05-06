@@ -1,0 +1,47 @@
+================================================
+GIT COLLABORATION GUIDE: Pushing to your Branch
+================================================
+
+Since your friend created the repository and invited you as a collaborator, here are the exact terminal commands you need to run to upload your code safely:
+
+STEP 1: Initialize Git in your project folder (if you haven't already)
+------------------------------------------------
+Open a NEW terminal inside your "Mood Detection" folder and run:
+git init
+
+STEP 2: Link your folder to your friend's GitHub repository
+------------------------------------------------
+(Make sure to replace the URL with your friend's actual repository link!)
+git remote add origin https://github.com/FriendsUsername/RepoName.git
+
+STEP 3: Pull any existing files from their repo
+------------------------------------------------
+git pull origin main
+*(Note: If their default branch is named 'master', use 'git pull origin master' instead)*
+
+STEP 4: Create and switch to your new branch
+------------------------------------------------
+Give your branch a name (e.g., your name or 'ai-frontend-setup'):
+git checkout -b your-branch-name
+
+STEP 5: Add all your new files
+------------------------------------------------
+This prepares all your amazing React and FastAPI code to be uploaded:
+git add .
+
+STEP 6: Commit your code
+------------------------------------------------
+Write a short message explaining what you built:
+git commit -m "Added complete React frontend, FastAPI backend, and AI logic"
+
+STEP 7: Push your branch to GitHub
+------------------------------------------------
+Upload your code to the remote repository:
+git push -u origin your-branch-name
+
+================================================
+WHAT HAPPENS NEXT?
+================================================
+Once you run the push command, go to your friend's GitHub repository link in your browser. 
+You will see a green button appear that says "Compare & pull request". 
+Click that button so your friend can review your code and merge your branch into the main project!
