@@ -243,6 +243,64 @@ function App() {
           {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
         </button>
 
+        <nav className="top-nav">
+          <div style={{ display: 'flex', alignItems: 'center', marginRight: 'auto', fontWeight: 'bold', fontSize: '1.4rem', color: 'var(--accent-color)', gap: '10px' }}>
+             <Sun size={24} color="var(--accent-color)" /> MindTrace AI+
+          </div>
+          
+          <button 
+            className={`nav-item ${activeTab === 'home' ? 'active' : ''}`}
+            onClick={() => setActiveTab('home')}
+          >
+            Check In
+          </button>
+
+          <button 
+            className={`nav-item ${activeTab === 'tracker' ? 'active' : ''}`}
+            onClick={() => handleNavClick('tracker')}
+            style={{ position: 'relative' }}
+          >
+            {isDemo && !isAuthenticated && <Lock size={14} color="#888" style={{position: 'absolute', top: '10px', right: '5px'}} />}
+            Live Scan
+          </button>
+          
+          <button 
+            className={`nav-item ${activeTab === 'journal' ? 'active' : ''}`}
+            onClick={() => handleNavClick('journal')}
+            style={{ position: 'relative' }}
+          >
+            {isDemo && !isAuthenticated && <Lock size={14} color="#888" style={{position: 'absolute', top: '10px', right: '5px'}} />}
+            Journal
+          </button>
+          
+          <button 
+            className={`nav-item ${activeTab === 'stats' ? 'active' : ''}`}
+            onClick={() => handleNavClick('stats')}
+            style={{ position: 'relative' }}
+          >
+            {isDemo && !isAuthenticated && <Lock size={14} color="#888" style={{position: 'absolute', top: '10px', right: '5px'}} />}
+            Stats
+          </button>
+
+          <button 
+            className={`nav-item ${activeTab === 'quotes' ? 'active' : ''}`}
+            onClick={() => handleNavClick('quotes')}
+            style={{ position: 'relative' }}
+          >
+            {isDemo && !isAuthenticated && <Lock size={14} color="#888" style={{position: 'absolute', top: '10px', right: '5px'}} />}
+            Quotes
+          </button>
+
+          <button 
+            className={`nav-item ${activeTab === 'profile' ? 'active' : ''}`}
+            onClick={() => handleNavClick('profile')}
+            style={{ position: 'relative' }}
+          >
+            {isDemo && !isAuthenticated && <Lock size={14} color="#888" style={{position: 'absolute', top: '10px', right: '5px'}} />}
+            Profile
+          </button>
+        </nav>
+
         <main className="main-content">
           {activeTab === 'home' && <Home onSaveEntry={addEntry} isDemo={isDemo} isAuthenticated={isAuthenticated} demoCount={demoCount} onRequireLogin={() => setShowAuthModal(true)} onDemoAnalyze={handleDemoAnalyze} userName={userName} />}
           {activeTab === 'tracker' && <LiveTracker />}
@@ -251,66 +309,6 @@ function App() {
           {activeTab === 'quotes' && <Quotes />}
           {activeTab === 'profile' && <Profile onLogout={handleLogout} />}
         </main>
-
-        <nav className="bottom-nav">
-          <button 
-            className={`nav-item ${activeTab === 'home' ? 'active' : ''}`}
-            onClick={() => setActiveTab('home')}
-          >
-            <HomeIcon size={24} />
-            <span style={{ fontSize: '10px' }}>Check In</span>
-          </button>
-
-          <button 
-            className={`nav-item ${activeTab === 'tracker' ? 'active' : ''}`}
-            onClick={() => handleNavClick('tracker')}
-            style={{ position: 'relative' }}
-          >
-            <Camera size={24} color={isDemo && !isAuthenticated ? '#555' : undefined} />
-            {isDemo && !isAuthenticated && <Lock size={12} color="#888" style={{position: 'absolute', top: 5, right: '20%'}} />}
-            <span style={{ fontSize: '10px', color: isDemo && !isAuthenticated ? '#555' : undefined }}>Live Scan</span>
-          </button>
-          
-          <button 
-            className={`nav-item ${activeTab === 'journal' ? 'active' : ''}`}
-            onClick={() => handleNavClick('journal')}
-            style={{ position: 'relative' }}
-          >
-            <Book size={24} color={isDemo && !isAuthenticated ? '#555' : undefined} />
-            {isDemo && !isAuthenticated && <Lock size={12} color="#888" style={{position: 'absolute', top: 5, right: '20%'}} />}
-            <span style={{ fontSize: '10px', color: isDemo && !isAuthenticated ? '#555' : undefined }}>Journal</span>
-          </button>
-          
-          <button 
-            className={`nav-item ${activeTab === 'stats' ? 'active' : ''}`}
-            onClick={() => handleNavClick('stats')}
-            style={{ position: 'relative' }}
-          >
-            <BarChart2 size={24} color={isDemo && !isAuthenticated ? '#555' : undefined} />
-            {isDemo && !isAuthenticated && <Lock size={12} color="#888" style={{position: 'absolute', top: 5, right: '20%'}} />}
-            <span style={{ fontSize: '10px', color: isDemo && !isAuthenticated ? '#555' : undefined }}>Stats</span>
-          </button>
-
-          <button 
-            className={`nav-item ${activeTab === 'quotes' ? 'active' : ''}`}
-            onClick={() => handleNavClick('quotes')}
-            style={{ position: 'relative' }}
-          >
-            <MessageSquareQuote size={24} color={isDemo && !isAuthenticated ? '#555' : undefined} />
-            {isDemo && !isAuthenticated && <Lock size={12} color="#888" style={{position: 'absolute', top: 5, right: '20%'}} />}
-            <span style={{ fontSize: '10px', color: isDemo && !isAuthenticated ? '#555' : undefined }}>Quotes</span>
-          </button>
-
-          <button 
-            className={`nav-item ${activeTab === 'profile' ? 'active' : ''}`}
-            onClick={() => handleNavClick('profile')}
-            style={{ position: 'relative' }}
-          >
-            <UserCircle2 size={24} color={isDemo && !isAuthenticated ? '#555' : undefined} />
-            {isDemo && !isAuthenticated && <Lock size={12} color="#888" style={{position: 'absolute', top: 5, right: '20%'}} />}
-            <span style={{ fontSize: '10px', color: isDemo && !isAuthenticated ? '#555' : undefined }}>Profile</span>
-          </button>
-        </nav>
 
         {/* Locked Modal Overlay */}
         {showAuthModal && (

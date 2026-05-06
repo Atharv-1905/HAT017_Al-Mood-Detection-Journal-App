@@ -155,11 +155,6 @@ export default function Home({ onSaveEntry, isDemo, isAuthenticated, demoCount, 
 
   return (
     <div className="tab-container">
-      <header className="header">
-        <Sparkles className="logo-icon" />
-        <h1>MindTrace</h1>
-      </header>
-      
       <AnimatePresence mode="wait">
         
         {/* LANDING VIEW */}

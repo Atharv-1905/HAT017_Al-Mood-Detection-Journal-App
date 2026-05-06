@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindTrace AI+ | Routing...</title>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #4fd1c5;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(79, 209, 197, 0.3);
+            border-bottom-color: #4fd1c5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px auto;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div>
+        <div class="loader"></div>
+        <h2>Optimizing UI for your device...</h2>
+    </div>
+
+    <script>
+        // REPLACE THESE URLS WITH YOUR ACTUAL DEPLOYED VERCEL URLS
+        const MOBILE_APP_URL = "https://your-mobile-vercel-app.vercel.app";
+        const LAPTOP_APP_URL = "https://your-laptop-vercel-app.vercel.app";
+
+        setTimeout(() => {
+            // Detect if the user is on a Mobile Device or Tablet
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const isSmallScreen = window.innerWidth <= 768;
+
+            if (isMobile || isSmallScreen) {
+                window.location.replace(MOBILE_APP_URL);
+            } else {
+                window.location.replace(LAPTOP_APP_URL);
+            }
+        }, 800); // Slight delay for smooth visual transition
+    </script>
+</body>
+</html>

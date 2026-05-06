@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* DARK THEME (Default) */
+  --bg-color: #0b0c10;
+  --bg-secondary: #1f2833;
+  --text-main: #ffffff;
+  --text-muted: #c5c6c7;
+  --accent-color: #66fcf1;
+  --accent-hover: #45a29e;
+  --card-bg: rgba(31, 40, 51, 0.6);
+  --card-border: rgba(102, 252, 241, 0.1);
+  --card-blur: blur(12px);
+  --nav-bg: rgba(11, 12, 16, 0.95);
+  --gradient-bg: radial-gradient(circle at top right, #1f2833 0%, #0b0c10 100%);
+  --input-bg: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='light'] {
+  /* LIGHT THEME (Fresh Mind) */
+  --bg-color: #f0f4f8;
+  --bg-secondary: #ffffff;
+  --text-main: #2d3748;
+  --text-muted: #718096;
+  --accent-color: #4fd1c5;
+  --accent-hover: #319795;
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --card-border: rgba(79, 209, 197, 0.3);
+  --nav-bg: rgba(255, 255, 255, 0.95);
+  --gradient-bg: radial-gradient(circle at top right, #e6fffa 0%, #ebf8ff 100%);
+  --input-bg: rgba(255, 255, 255, 0.6);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: scroll; /* Prevents app from shifting horizontally when tabs change */
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+input, textarea {
+  font-family: inherit;
+}
