@@ -47,9 +47,9 @@ function App() {
     const token = localStorage.getItem('mindtrace_token');
     if (token) {
       setIsAuthenticated(true);
-      
+
       // Fetch User Profile for Name
-      axios.get(`http://${window.location.hostname}:8000/api/auth/profile?token=${token}`)
+      axios.get(`https://mindtrace-backend-ygob.onrender.com/api/auth/profile?token=${token}`)
         .then(res => {
           if (res.data && res.data.full_name) {
             setUserName(res.data.full_name.split(' ')[0]);
@@ -58,23 +58,23 @@ function App() {
         .catch(err => console.error("Profile Fetch Error", err));
 
       // Fetch DB Entries!
-      axios.get(`http://${window.location.hostname}:8000/api/entries?token=${token}`)
+      axios.get(`https://mindtrace-backend-ygob.onrender.com/api/entries?token=${token}`)
         .then(res => {
-           if (res.data) setEntries(res.data);
+          if (res.data) setEntries(res.data);
         })
         .catch(err => {
-           console.error("DB Fetch Error", err);
-           const saved = localStorage.getItem('mindtrace_entries');
-           if (saved) setEntries(JSON.parse(saved));
+          console.error("DB Fetch Error", err);
+          const saved = localStorage.getItem('mindtrace_entries');
+          if (saved) setEntries(JSON.parse(saved));
         });
     } else {
-       // Demo mode entries
-       const saved = localStorage.getItem('mindtrace_entries');
-       if (saved && JSON.parse(saved).length > 0) {
-         setEntries(JSON.parse(saved));
-       } else {
-         setEntries(MOCK_ENTRIES);
-       }
+      // Demo mode entries
+      const saved = localStorage.getItem('mindtrace_entries');
+      if (saved && JSON.parse(saved).length > 0) {
+        setEntries(JSON.parse(saved));
+      } else {
+        setEntries(MOCK_ENTRIES);
+      }
     }
   }, [isAuthenticated]);
 
@@ -89,7 +89,7 @@ function App() {
 
   useEffect(() => {
     // Entries fetching is now handled in the first useEffect based on auth status
-    
+
     // Register Service Worker for Mobile Notifications
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
@@ -121,11 +121,11 @@ function App() {
   const addEntry = async (newEntry) => {
     const updated = [newEntry, ...entries];
     setEntries(updated);
-    
+
     if (isAuthenticated) {
       try {
         const token = localStorage.getItem('mindtrace_token');
-        await axios.post(`http://${window.location.hostname}:8000/api/entries?token=${token}`, {
+        await axios.post(`https://mindtrace-backend-ygob.onrender.com/api/entries?token=${token}`, {
           text: newEntry.text,
           emotion: newEntry.analysis.emotion,
           wellness_index: newEntry.analysis.wellness_index,
@@ -143,9 +143,9 @@ function App() {
   const editEntry = async (entryId, newText, newAnalysisData = null) => {
     const updated = entries.map(e => {
       if (e.id === entryId) {
-        return { 
-          ...e, 
-          text: newText, 
+        return {
+          ...e,
+          text: newText,
           date: new Date().toISOString(),
           ...(newAnalysisData && { analysis: newAnalysisData })
         };
@@ -153,7 +153,7 @@ function App() {
       return e;
     });
     setEntries(updated);
-    
+
     if (isAuthenticated) {
       try {
         const token = localStorage.getItem('mindtrace_token');
@@ -163,7 +163,7 @@ function App() {
           payload.wellness_index = newAnalysisData.wellness_index;
           payload.risk_level = newAnalysisData.risk_level;
         }
-        await axios.put(`http://${window.location.hostname}:8000/api/entries/${entryId}?token=${token}`, payload);
+        await axios.put(`https://mindtrace-backend-ygob.onrender.com/api/entries/${entryId}?token=${token}`, payload);
       } catch (err) { console.error("Edit error", err); }
     } else {
       localStorage.setItem('mindtrace_entries', JSON.stringify(updated));
@@ -176,8 +176,8 @@ function App() {
 
     // 2. Run the heavy AI analysis in the background
     try {
-      const aiRes = await axios.post(`http://${window.location.hostname}:8000/api/analyze`, { text: newText });
-      
+      const aiRes = await axios.post(`https://mindtrace-backend-ygob.onrender.com/api/analyze`, { text: newText });
+
       // 3. Silently update the entry again with the new emotion statistics once AI finishes
       await editEntry(entryId, newText, aiRes.data);
       return aiRes.data;
@@ -193,7 +193,7 @@ function App() {
     if (isAuthenticated) {
       try {
         const token = localStorage.getItem('mindtrace_token');
-        await axios.delete(`http://${window.location.hostname}:8000/api/entries/${entryId}?token=${token}`);
+        await axios.delete(`https://mindtrace-backend-ygob.onrender.com/api/entries/${entryId}?token=${token}`);
       } catch (err) { console.error("Delete error", err); }
     } else {
       localStorage.setItem('mindtrace_entries', JSON.stringify(updated));
@@ -229,7 +229,7 @@ function App() {
     return (
       <div className="app-wrapper">
         <div className="app-container">
-           <Auth onLogin={() => setIsAuthenticated(true)} onDemo={() => setIsDemo(true)} />
+          <Auth onLogin={() => setIsAuthenticated(true)} onDemo={() => setIsDemo(true)} />
         </div>
       </div>
     );
@@ -238,65 +238,65 @@ function App() {
   return (
     <div className="app-wrapper">
       <div className="app-container">
-        
+
         <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle Theme">
           {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
         </button>
 
         <nav className="top-nav">
           <div style={{ display: 'flex', alignItems: 'center', marginRight: 'auto', fontWeight: 'bold', fontSize: '1.4rem', color: 'var(--accent-color)', gap: '10px' }}>
-             <Sun size={24} color="var(--accent-color)" /> MindTrace AI+
+            <Sun size={24} color="var(--accent-color)" /> MindTrace AI+
           </div>
-          
-          <button 
+
+          <button
             className={`nav-item ${activeTab === 'home' ? 'active' : ''}`}
             onClick={() => setActiveTab('home')}
           >
             Check In
           </button>
 
-          <button 
+          <button
             className={`nav-item ${activeTab === 'tracker' ? 'active' : ''}`}
             onClick={() => handleNavClick('tracker')}
             style={{ position: 'relative' }}
           >
-            {isDemo && !isAuthenticated && <Lock size={14} color="#888" style={{position: 'absolute', top: '10px', right: '5px'}} />}
+            {isDemo && !isAuthenticated && <Lock size={14} color="#888" style={{ position: 'absolute', top: '10px', right: '5px' }} />}
             Live Scan
           </button>
-          
-          <button 
+
+          <button
             className={`nav-item ${activeTab === 'journal' ? 'active' : ''}`}
             onClick={() => handleNavClick('journal')}
             style={{ position: 'relative' }}
           >
-            {isDemo && !isAuthenticated && <Lock size={14} color="#888" style={{position: 'absolute', top: '10px', right: '5px'}} />}
+            {isDemo && !isAuthenticated && <Lock size={14} color="#888" style={{ position: 'absolute', top: '10px', right: '5px' }} />}
             Journal
           </button>
-          
-          <button 
+
+          <button
             className={`nav-item ${activeTab === 'stats' ? 'active' : ''}`}
             onClick={() => handleNavClick('stats')}
             style={{ position: 'relative' }}
           >
-            {isDemo && !isAuthenticated && <Lock size={14} color="#888" style={{position: 'absolute', top: '10px', right: '5px'}} />}
+            {isDemo && !isAuthenticated && <Lock size={14} color="#888" style={{ position: 'absolute', top: '10px', right: '5px' }} />}
             Stats
           </button>
 
-          <button 
+          <button
             className={`nav-item ${activeTab === 'quotes' ? 'active' : ''}`}
             onClick={() => handleNavClick('quotes')}
             style={{ position: 'relative' }}
           >
-            {isDemo && !isAuthenticated && <Lock size={14} color="#888" style={{position: 'absolute', top: '10px', right: '5px'}} />}
+            {isDemo && !isAuthenticated && <Lock size={14} color="#888" style={{ position: 'absolute', top: '10px', right: '5px' }} />}
             Quotes
           </button>
 
-          <button 
+          <button
             className={`nav-item ${activeTab === 'profile' ? 'active' : ''}`}
             onClick={() => handleNavClick('profile')}
             style={{ position: 'relative' }}
           >
-            {isDemo && !isAuthenticated && <Lock size={14} color="#888" style={{position: 'absolute', top: '10px', right: '5px'}} />}
+            {isDemo && !isAuthenticated && <Lock size={14} color="#888" style={{ position: 'absolute', top: '10px', right: '5px' }} />}
             Profile
           </button>
         </nav>
@@ -322,8 +322,8 @@ function App() {
               <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem', fontSize: '0.9rem', lineHeight: 1.5 }}>
                 This feature is disabled in Demo Mode. Please register or login to unlock full access to MindTrace!
               </p>
-              <button 
-                className="pulse-btn" 
+              <button
+                className="pulse-btn"
                 style={{ width: '100%' }}
                 onClick={() => {
                   setShowAuthModal(false);

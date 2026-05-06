@@ -9,7 +9,7 @@ export default function Home({ onSaveEntry, isDemo, isAuthenticated, demoCount, 
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [isListening, setIsListening] = useState(false);
-  
+
   const recognitionRef = useRef(null);
   const userWantsMicOnRef = useRef(false);
 
@@ -52,16 +52,16 @@ export default function Home({ onSaveEntry, isDemo, isAuthenticated, demoCount, 
     recognition.onstart = () => setIsListening(true);
     recognition.onerror = (e) => {
       if (e.error !== 'no-speech') {
-         console.error("Speech Error:", e);
+        console.error("Speech Error:", e);
       }
     };
-    
+
     // CRITICAL: Chrome stops mic after pauses. We force it back on if user hasn't clicked Stop!
     recognition.onend = () => {
       if (userWantsMicOnRef.current) {
-         try { recognition.start(); } catch(e) {}
+        try { recognition.start(); } catch (e) { }
       } else {
-         setIsListening(false);
+        setIsListening(false);
       }
     };
 
@@ -83,7 +83,7 @@ export default function Home({ onSaveEntry, isDemo, isAuthenticated, demoCount, 
   const handleAnalyze = async () => {
     if (!text.trim()) return;
     setLoading(true);
-    
+
     // Enforce Demo Limit
     if (isDemo && !isAuthenticated && demoCount >= 2) {
       onRequireLogin();
@@ -101,14 +101,14 @@ export default function Home({ onSaveEntry, isDemo, isAuthenticated, demoCount, 
       if (isDemo && !isAuthenticated) {
         onDemoAnalyze();
       }
-      const backendUrl = `http://${window.location.hostname}:8000/api/analyze`;
+      const backendUrl = `https://mindtrace-backend-ygob.onrender.com/api/analyze`;
       const response = await axios.post(backendUrl, {
         text: text,
       });
       const data = response.data;
       setResult(data);
       setViewState('result');
-      
+
       onSaveEntry({
         id: Date.now().toString(),
         text: text,
@@ -143,7 +143,7 @@ export default function Home({ onSaveEntry, isDemo, isAuthenticated, demoCount, 
           analysis: mockData
         });
         setLoading(false);
-      }, 1500); 
+      }, 1500);
     }
   };
 
@@ -159,27 +159,27 @@ export default function Home({ onSaveEntry, isDemo, isAuthenticated, demoCount, 
         <Sparkles className="logo-icon" />
         <h1>MindTrace</h1>
       </header>
-      
+
       <AnimatePresence mode="wait">
-        
+
         {/* LANDING VIEW */}
         {viewState === 'landing' && (
-          <motion.div 
+          <motion.div
             key="landing"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             className="landing-container center-content flex-col"
           >
-            <motion.div 
+            <motion.div
               className="floating-blob"
-              animate={{ 
+              animate={{
                 y: [0, -20, 0],
                 rotate: [0, 5, -5, 0],
                 scale: [1, 1.05, 1]
               }}
-              transition={{ 
-                duration: 5, 
+              transition={{
+                duration: 5,
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
@@ -188,11 +188,11 @@ export default function Home({ onSaveEntry, isDemo, isAuthenticated, demoCount, 
                 <Heart size={48} className="blob-icon" />
               </div>
             </motion.div>
-            
+
             <h2 className="greeting-text">Good {timeOfDay}{userName ? `, ${userName}` : ''}!</h2>
-            <p className="greeting-subtext">Take a deep breath.<br/>How are you feeling right now?</p>
-            
-            <button 
+            <p className="greeting-subtext">Take a deep breath.<br />How are you feeling right now?</p>
+
+            <button
               className="pulse-btn"
               onClick={() => setViewState('input')}
             >
@@ -203,7 +203,7 @@ export default function Home({ onSaveEntry, isDemo, isAuthenticated, demoCount, 
 
         {/* INPUT VIEW */}
         {viewState === 'input' && (
-          <motion.div 
+          <motion.div
             key="input"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -215,9 +215,9 @@ export default function Home({ onSaveEntry, isDemo, isAuthenticated, demoCount, 
             </button>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h2>Express yourself</h2>
-              
+
               {/* VOICE TO TEXT BUTTON */}
-              <button 
+              <button
                 onClick={toggleListening}
                 style={{
                   background: isListening ? 'rgba(255,0,0,0.2)' : 'var(--input-bg)',
@@ -234,13 +234,13 @@ export default function Home({ onSaveEntry, isDemo, isAuthenticated, demoCount, 
                 {isListening ? <Mic size={20} className="pulse-mic" /> : <MicOff size={20} />}
               </button>
             </div>
-            
+
             <p style={{ color: isListening ? '#ff4757' : 'var(--text-muted)', transition: 'color 0.3s' }}>
               {isListening ? "Listening... Speak now!" : "Write or speak your thoughts honestly."}
             </p>
-            
+
             <div className="textarea-wrapper" style={{ borderColor: isListening ? '#ff4757' : 'transparent' }}>
-              <textarea 
+              <textarea
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 placeholder="I'm feeling..."
@@ -248,9 +248,9 @@ export default function Home({ onSaveEntry, isDemo, isAuthenticated, demoCount, 
                 autoFocus
               />
             </div>
-            
-            <button 
-              className="analyze-btn" 
+
+            <button
+              className="analyze-btn"
               onClick={handleAnalyze}
               disabled={loading || !text.trim()}
             >
@@ -268,7 +268,7 @@ export default function Home({ onSaveEntry, isDemo, isAuthenticated, demoCount, 
 
         {/* RESULT VIEW */}
         {viewState === 'result' && result && (
-          <motion.div 
+          <motion.div
             key="result"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -308,10 +308,10 @@ export default function Home({ onSaveEntry, isDemo, isAuthenticated, demoCount, 
             </div>
 
             <div className="suggestions-card">
-              <h3><Activity size={20}/> Suggestions</h3>
+              <h3><Activity size={20} /> Suggestions</h3>
               <ul>
                 {result.suggestions.map((suggestion, idx) => (
-                  <motion.li 
+                  <motion.li
                     key={idx}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}

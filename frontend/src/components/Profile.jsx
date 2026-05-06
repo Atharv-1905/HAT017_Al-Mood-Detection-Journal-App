@@ -15,7 +15,7 @@ export default function Profile({ onLogout }) {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("mindtrace_token");
-        const res = await axios.get(`http://${window.location.hostname}:8000/api/auth/profile?token=${token}`);
+        const res = await axios.get(`https://mindtrace-backend-ygob.onrender.com/api/auth/profile?token=${token}`);
         setProfile(res.data);
       } catch (err) {
         setError("Failed to load profile. Session might be expired.");
@@ -29,8 +29,8 @@ export default function Profile({ onLogout }) {
   if (loading) {
     return (
       <div className="tab-container center-content">
-         <div className="loader"></div>
-         <p style={{ marginTop: '1rem', color: 'var(--text-muted)' }}>Loading Profile...</p>
+        <div className="loader"></div>
+        <p style={{ marginTop: '1rem', color: 'var(--text-muted)' }}>Loading Profile...</p>
       </div>
     );
   }
@@ -38,8 +38,8 @@ export default function Profile({ onLogout }) {
   if (error || !profile) {
     return (
       <div className="tab-container center-content">
-         <p style={{ color: '#F44336' }}>{error}</p>
-         <button onClick={onLogout} className="pulse-btn" style={{ marginTop: '1rem' }}>Return to Login</button>
+        <p style={{ color: '#F44336' }}>{error}</p>
+        <button onClick={onLogout} className="pulse-btn" style={{ marginTop: '1rem' }}>Return to Login</button>
       </div>
     );
   }
@@ -48,7 +48,7 @@ export default function Profile({ onLogout }) {
   if (!dateStr.endsWith('Z')) {
     dateStr += 'Z';
   }
-  
+
   const registeredDate = new Date(dateStr).toLocaleDateString('en-US', {
     year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
   });
@@ -61,7 +61,7 @@ export default function Profile({ onLogout }) {
         <h2>My Profile</h2>
       </header>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '24px', padding: '2rem', textAlign: 'center', marginBottom: '2rem' }}
@@ -76,10 +76,10 @@ export default function Profile({ onLogout }) {
       </motion.div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
-        
+
         <div style={{ background: 'var(--input-bg)', padding: '1.2rem', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <div style={{ background: 'rgba(79, 209, 197, 0.1)', padding: '0.8rem', borderRadius: '12px' }}>
-             <ShieldCheck size={24} color="var(--accent-color)" />
+            <ShieldCheck size={24} color="var(--accent-color)" />
           </div>
           <div>
             <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Account Status</div>
@@ -89,7 +89,7 @@ export default function Profile({ onLogout }) {
 
         <div style={{ background: 'var(--input-bg)', padding: '1.2rem', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <div style={{ background: 'rgba(161, 128, 255, 0.1)', padding: '0.8rem', borderRadius: '12px' }}>
-             <Calendar size={24} color="#a180ff" />
+            <Calendar size={24} color="#a180ff" />
           </div>
           <div>
             <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Registered On</div>
@@ -114,14 +114,14 @@ export default function Profile({ onLogout }) {
         </div>
       </div>
 
-      <button 
+      <button
         onClick={() => setShowPasswordModal(true)}
         style={{ width: '100%', padding: '1rem', background: 'var(--input-bg)', border: '1px solid var(--card-border)', color: 'var(--text-main)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s', marginBottom: '1rem' }}
       >
         <LogOut size={20} /> Change Password
       </button>
 
-      <button 
+      <button
         onClick={onLogout}
         style={{ width: '100%', padding: '1rem', background: 'transparent', border: '1px solid #F44336', color: '#F44336', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s' }}
       >
@@ -134,27 +134,27 @@ export default function Profile({ onLogout }) {
           <div style={{ background: 'var(--card-bg)', padding: '2rem', borderRadius: '24px', maxWidth: '350px', width: '90%', border: '1px solid var(--card-border)' }}>
             <h2 style={{ marginBottom: '1rem', fontSize: '1.4rem', textAlign: 'center' }}>Change Password</h2>
             {pwdStatus && <p style={{ color: pwdStatus.includes('success') ? '#4caf50' : '#f44336', textAlign: 'center', marginBottom: '1rem' }}>{pwdStatus}</p>}
-            <input 
-              type="password" 
-              placeholder="New Password" 
+            <input
+              type="password"
+              placeholder="New Password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               style={{ width: '100%', background: 'var(--input-bg)', color: 'var(--text-main)', border: '1px solid var(--card-border)', borderRadius: '12px', padding: '10px', marginBottom: '1.5rem', outline: 'none' }}
             />
             <div style={{ display: 'flex', gap: '10px' }}>
-              <button 
+              <button
                 style={{ flex: 1, padding: '1rem', background: 'transparent', border: '1px solid var(--text-muted)', color: 'var(--text-muted)', borderRadius: '30px', fontWeight: 'bold' }}
                 onClick={() => { setShowPasswordModal(false); setPwdStatus(null); setNewPassword(''); }}
               >
                 Cancel
               </button>
-              <button 
+              <button
                 style={{ flex: 1, padding: '1rem', background: 'var(--accent-color)', color: '#000', borderRadius: '30px', fontWeight: 'bold', border: 'none' }}
                 onClick={async () => {
                   if (!newPassword) return;
                   try {
                     const token = localStorage.getItem("mindtrace_token");
-                    await axios.put(`http://${window.location.hostname}:8000/api/auth/password?token=${token}`, { new_password: newPassword });
+                    await axios.put(`https://mindtrace-backend-ygob.onrender.com/api/auth/password?token=${token}`, { new_password: newPassword });
                     setPwdStatus('Password updated successfully!');
                     setTimeout(() => { setShowPasswordModal(false); setPwdStatus(null); setNewPassword(''); }, 2000);
                   } catch (err) {

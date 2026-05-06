@@ -28,7 +28,7 @@ export default function Auth({ onLogin, onDemo }) {
   }
 
   const toggleInterest = (interest) => {
-    setSelectedInterests(prev => 
+    setSelectedInterests(prev =>
       prev.includes(interest) ? prev.filter(i => i !== interest) : [...prev, interest]
     );
   };
@@ -38,7 +38,7 @@ export default function Auth({ onLogin, onDemo }) {
     setLoading(true);
     setError(null);
     try {
-      const backendUrl = `http://${window.location.hostname}:8000/api/auth/${isLogin ? 'login' : 'register'}`;
+      const backendUrl = `https://mindtrace-backend-ygob.onrender.com/api/auth/${isLogin ? 'login' : 'register'}`;
       const payload = isLogin ? { email: formData.email, password: formData.password } : { ...formData, interests: selectedInterests };
       const res = await axios.post(backendUrl, payload);
       localStorage.setItem("mindtrace_token", res.data.access_token);
@@ -53,9 +53,9 @@ export default function Auth({ onLogin, onDemo }) {
   return (
     <div className="tab-container flex-col" style={{ alignItems: 'center', justifyContent: 'center', minHeight: '100vh', paddingBottom: '0' }}>
       <AnimatePresence mode="wait">
-        
+
         {view === 'landing' && (
-          <motion.div 
+          <motion.div
             key="landing"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -63,7 +63,7 @@ export default function Auth({ onLogin, onDemo }) {
             className="landing-container center-content flex-col"
             style={{ width: '100%' }}
           >
-            <motion.div 
+            <motion.div
               className="floating-blob"
               animate={{ y: [0, -20, 0], rotate: [0, 5, -5, 0], scale: [1, 1.05, 1] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
@@ -72,15 +72,15 @@ export default function Auth({ onLogin, onDemo }) {
                 <Heart size={48} className="blob-icon" />
               </div>
             </motion.div>
-            
+
             <h2 className="greeting-text">Good {timeOfDay}!</h2>
-            <p className="greeting-subtext">Take a deep breath.<br/>Welcome to MindTrace AI.</p>
-            
+            <p className="greeting-subtext">Take a deep breath.<br />Welcome to MindTrace AI.</p>
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', maxWidth: '300px' }}>
               <button className="pulse-btn" onClick={() => setView('auth')} style={{ width: '100%' }}>
                 Register / Login
               </button>
-              <button 
+              <button
                 onClick={onDemo}
                 style={{ background: 'transparent', border: '1px solid var(--accent-color)', color: 'var(--accent-color)', padding: '1rem', borderRadius: '30px', fontWeight: 'bold' }}
               >
@@ -91,7 +91,7 @@ export default function Auth({ onLogin, onDemo }) {
         )}
 
         {view === 'auth' && (
-          <motion.div 
+          <motion.div
             key="auth"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -101,9 +101,9 @@ export default function Auth({ onLogin, onDemo }) {
             <button className="back-btn" onClick={() => setView('landing')} style={{ marginBottom: '1.5rem', background: 'var(--input-bg)' }}>
               <ArrowLeft size={20} />
             </button>
-            
+
             <h2 style={{ marginBottom: '1.5rem', fontSize: '1.4rem' }}>{isLogin ? "Welcome Back" : "Create Account"}</h2>
-            
+
             {error && (
               <div style={{ background: 'rgba(244, 67, 54, 0.1)', color: '#F44336', padding: '0.8rem', borderRadius: '12px', marginBottom: '1rem', fontSize: '0.9rem', border: '1px solid rgba(244, 67, 54, 0.3)' }}>
                 {error}
@@ -111,15 +111,15 @@ export default function Auth({ onLogin, onDemo }) {
             )}
 
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              
+
               <AnimatePresence>
                 {!isLogin && (
                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
                     <div className="textarea-wrapper" style={{ display: 'flex', alignItems: 'center', padding: '0.8rem 1rem', marginBottom: 0 }}>
                       <User size={20} color="var(--text-muted)" style={{ marginRight: '1rem' }} />
-                      <input 
-                        type="text" placeholder="Full Name" required 
-                        value={formData.full_name} onChange={(e) => setFormData({...formData, full_name: e.target.value})}
+                      <input
+                        type="text" placeholder="Full Name" required
+                        value={formData.full_name} onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                         style={{ background: 'transparent', border: 'none', color: 'var(--text-main)', width: '100%', outline: 'none' }}
                       />
                     </div>
@@ -129,18 +129,18 @@ export default function Auth({ onLogin, onDemo }) {
 
               <div className="textarea-wrapper" style={{ display: 'flex', alignItems: 'center', padding: '0.8rem 1rem', marginBottom: 0 }}>
                 <Mail size={20} color="var(--text-muted)" style={{ marginRight: '1rem' }} />
-                <input 
-                  type="email" placeholder="Email Address" required 
-                  value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})}
+                <input
+                  type="email" placeholder="Email Address" required
+                  value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   style={{ background: 'transparent', border: 'none', color: 'var(--text-main)', width: '100%', outline: 'none' }}
                 />
               </div>
 
               <div className="textarea-wrapper" style={{ display: 'flex', alignItems: 'center', padding: '0.8rem 1rem', marginBottom: 0 }}>
                 <Lock size={20} color="var(--text-muted)" style={{ marginRight: '1rem' }} />
-                <input 
-                  type="password" placeholder="Password" required 
-                  value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})}
+                <input
+                  type="password" placeholder="Password" required
+                  value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   style={{ background: 'transparent', border: 'none', color: 'var(--text-main)', width: '100%', outline: 'none' }}
                 />
               </div>
@@ -150,10 +150,10 @@ export default function Auth({ onLogin, onDemo }) {
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>Select your interests:</p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                     {INTERESTS_OPTIONS.map(interest => (
-                      <div 
-                        key={interest} 
+                      <div
+                        key={interest}
                         onClick={() => toggleInterest(interest)}
-                        style={{ 
+                        style={{
                           padding: '0.4rem 0.8rem', borderRadius: '20px', fontSize: '0.8rem', cursor: 'pointer',
                           border: `1px solid ${selectedInterests.includes(interest) ? 'var(--accent-color)' : 'var(--card-border)'}`,
                           background: selectedInterests.includes(interest) ? 'rgba(102, 252, 241, 0.1)' : 'var(--input-bg)',
@@ -198,31 +198,31 @@ export default function Auth({ onLogin, onDemo }) {
               <h2 style={{ marginBottom: '1rem', fontSize: '1.4rem', textAlign: 'center' }}>Reset Password</h2>
               {forgotStatus && <p style={{ color: '#4caf50', textAlign: 'center', marginBottom: '1rem' }}>{forgotStatus}</p>}
               <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', textAlign: 'center', marginBottom: '1rem' }}>Enter your email address and we will send you a reset link.</p>
-              <input 
-                type="email" 
-                placeholder="Email Address" 
+              <input
+                type="email"
+                placeholder="Email Address"
                 value={forgotEmail}
                 onChange={(e) => setForgotEmail(e.target.value)}
                 style={{ width: '100%', background: 'var(--input-bg)', color: 'var(--text-main)', border: '1px solid var(--card-border)', borderRadius: '12px', padding: '10px', marginBottom: '1.5rem', outline: 'none' }}
               />
               <div style={{ display: 'flex', gap: '10px' }}>
-                <button 
+                <button
                   style={{ flex: 1, padding: '1rem', background: 'transparent', border: '1px solid var(--text-muted)', color: 'var(--text-muted)', borderRadius: '30px', fontWeight: 'bold' }}
                   onClick={() => { setShowForgotPwd(false); setForgotStatus(null); setForgotEmail(''); }}
                 >
                   Cancel
                 </button>
-                <button 
+                <button
                   style={{ flex: 1, padding: '1rem', background: 'var(--accent-color)', color: '#000', borderRadius: '30px', fontWeight: 'bold', border: 'none' }}
                   onClick={() => {
                     if (!forgotEmail) return;
                     setForgotStatus(
-                      <div style={{color: '#4caf50', padding: '10px', background: 'rgba(76, 175, 80, 0.1)', borderRadius: '12px'}}>
-                        System Mock Link Generated:<br/>
+                      <div style={{ color: '#4caf50', padding: '10px', background: 'rgba(76, 175, 80, 0.1)', borderRadius: '12px' }}>
+                        System Mock Link Generated:<br />
                         <button onClick={() => {
                           setShowForgotPwd(false);
                           setView('reset_password');
-                        }} style={{color: 'var(--accent-color)', background: 'transparent', border: 'none', textDecoration: 'underline', marginTop: '10px', cursor: 'pointer', fontWeight: 'bold'}}>
+                        }} style={{ color: 'var(--accent-color)', background: 'transparent', border: 'none', textDecoration: 'underline', marginTop: '10px', cursor: 'pointer', fontWeight: 'bold' }}>
                           [Click Here to Reset Password]
                         </button>
                       </div>
@@ -238,7 +238,7 @@ export default function Auth({ onLogin, onDemo }) {
 
         {/* Reset Password View */}
         {view === 'reset_password' && (
-          <motion.div 
+          <motion.div
             key="reset"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -246,15 +246,15 @@ export default function Auth({ onLogin, onDemo }) {
             style={{ width: '100%', maxWidth: '400px', background: 'var(--card-bg)', padding: '2rem', borderRadius: '24px', border: '1px solid var(--card-border)', boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }}
           >
             <h2 style={{ marginBottom: '1.5rem', fontSize: '1.4rem', textAlign: 'center' }}>Reset Your Password</h2>
-            
+
             {error && (
               <div style={{ background: 'rgba(244, 67, 54, 0.1)', color: '#F44336', padding: '0.8rem', borderRadius: '12px', marginBottom: '1rem', fontSize: '0.9rem', border: '1px solid rgba(244, 67, 54, 0.3)' }}>
                 {error}
               </div>
             )}
-            
+
             <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem', fontSize: '0.9rem', textAlign: 'center' }}>
-              Setting new password for:<br/><strong style={{color: 'var(--text-main)'}}>{forgotEmail}</strong>
+              Setting new password for:<br /><strong style={{ color: 'var(--text-main)' }}>{forgotEmail}</strong>
             </p>
 
             <form onSubmit={async (e) => {
@@ -262,9 +262,9 @@ export default function Auth({ onLogin, onDemo }) {
               setLoading(true);
               setError(null);
               try {
-                await axios.post(`http://${window.location.hostname}:8000/api/auth/reset-password`, { 
-                  email: forgotEmail, 
-                  new_password: resetPasswordStr 
+                await axios.post(`https://mindtrace-backend-ygob.onrender.com/api/auth/reset-password`, {
+                  email: forgotEmail,
+                  new_password: resetPasswordStr
                 });
                 setView('auth');
                 setIsLogin(true);
@@ -277,8 +277,8 @@ export default function Auth({ onLogin, onDemo }) {
             }} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div className="textarea-wrapper" style={{ display: 'flex', alignItems: 'center', padding: '0.8rem 1rem', marginBottom: 0 }}>
                 <Lock size={20} color="var(--text-muted)" style={{ marginRight: '1rem' }} />
-                <input 
-                  type="password" placeholder="Enter New Password" required 
+                <input
+                  type="password" placeholder="Enter New Password" required
                   value={resetPasswordStr} onChange={(e) => setResetPasswordStr(e.target.value)}
                   style={{ background: 'transparent', border: 'none', color: 'var(--text-main)', width: '100%', outline: 'none' }}
                 />
