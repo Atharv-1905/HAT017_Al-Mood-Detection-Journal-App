@@ -3,13 +3,24 @@ import { Bell, X, Wind, BellRing } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { postLiveFrame } from '../services/visionService';
 import { saveFacialLog as apiSaveFacialLog } from '../services/api';
+import {
+  isElectron,
+  sendNativeNotification as bridgeNotify,
+  showOverlay,
+  onMonitoringToggle,
+  onOpenBreathing,
+} from '../services/electronBridge';
 import BreathingIntervention from './BreathingIntervention';
+
+// Cooldown between distress notifications (2 minutes)
+const NOTIF_COOLDOWN_MS = 2 * 60 * 1000;
 
 export default function LiveTracker() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const workerRef = useRef(null);
   const streamRef = useRef(null);
+  const lastNotifTimeRef = useRef(0);
   const [enabled, setEnabled] = useState(true);
   const [lastAlert, setLastAlert] = useState(null);
   const [showIntervention, setShowIntervention] = useState(false);
@@ -17,11 +28,23 @@ export default function LiveTracker() {
   const [isHidden, setIsHidden] = useState(document.hidden);
   const [lastCapture, setLastCapture] = useState(null);
 
-  // ─── TASK 2: Visibility change tracking ────────────────────
+  // ─── Visibility change tracking ────────────────────────────
   useEffect(() => {
     const onVisChange = () => setIsHidden(document.hidden);
     document.addEventListener('visibilitychange', onVisChange);
     return () => document.removeEventListener('visibilitychange', onVisChange);
+  }, []);
+
+  // ─── Electron IPC: Tray monitoring toggle ──────────────────
+  useEffect(() => {
+    const unsub = onMonitoringToggle((enabled) => setEnabled(enabled));
+    return unsub;
+  }, []);
+
+  // ─── Electron IPC: Notification click → open breathing ─────
+  useEffect(() => {
+    const unsub = onOpenBreathing(() => setShowBreathing(true));
+    return unsub;
   }, []);
 
   // ─── Capture + analyse a single frame ──────────────────────
@@ -80,11 +103,17 @@ export default function LiveTracker() {
       setLastCapture(new Date());
       const res = await postLiveFrame(imageSrc);
 
-      // ─── TASK 3: Distress routing ─────────────────────────
+      // ─── Distress routing (with 2-min cooldown) ────────────
       if (res && res.distress_level === 'high') {
+        const now = Date.now();
+        const elapsed = now - lastNotifTimeRef.current;
+        if (elapsed < NOTIF_COOLDOWN_MS) return; // Still in cooldown
+
+        lastNotifTimeRef.current = now;
+
         if (document.hidden) {
           // User is on another tab/app → send OS notification
-          sendNativeNotification(res);
+          sendDistressNotification(res);
         } else {
           // User is looking at the app → show in-app UI
           setLastAlert(res);
@@ -165,26 +194,23 @@ export default function LiveTracker() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled]);
 
-  // ─── TASK 3: Native notification sender ────────────────────
-  function sendNativeNotification(res) {
-    if (Notification.permission !== 'granted') {
-      console.warn('Notification permission not granted, cannot send OS alert');
-      return;
-    }
+  // ─── Native notification sender (Electron + Browser) ──────
+  function sendDistressNotification(res) {
+    const emotion = res.predicted_emotion || 'distress';
+    const confidence = Math.round((res.confidence_score || 0) * 100);
 
-    const notif = new Notification('MindTrace Alert 🧠', {
-      body: `You seem stressed (${res.predicted_emotion || 'distress'} detected at ${Math.round((res.confidence_score || 0) * 100)}% confidence). Click here for a quick breathing exercise.`,
-      icon: '/favicon.svg',
-      tag: 'mindtrace-distress', // prevents flooding
-      requireInteraction: true,
+    bridgeNotify({
+      title: 'MindTrace Alert 🧠',
+      body: `You seem stressed (${emotion} detected at ${confidence}% confidence). Click here for a quick breathing exercise.`,
+      emotion,
+      confidence,
+      onClickBreathing: () => setShowBreathing(true),
     });
 
-    notif.onclick = () => {
-      // Focus the MindTrace tab and open breathing UI
-      window.focus();
-      setShowBreathing(true);
-      notif.close();
-    };
+    // In Electron, also show the always-on-top overlay
+    if (isElectron()) {
+      showOverlay();
+    }
   }
 
   // ─── Test notification (for verifying setup works) ─────────

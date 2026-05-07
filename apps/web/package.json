@@ -1,15 +1,22 @@
 {
-  "name": "web",
+  "name": "mindtrace-ai-plus",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "MindTrace AI+ — AI-powered emotional wellness desktop app",
+  "author": "MindTrace Team",
+  "main": "electron/main.js",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "electron:dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
+    "electron:build": "vite build && electron-builder",
+    "electron:start": "electron ."
   },
   "dependencies": {
+    "auto-launch": "^5.0.6",
     "autoprefixer": "^10.5.0",
     "axios": "^1.16.0",
     "framer-motion": "^12.38.0",
@@ -25,10 +32,42 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
+    "concurrently": "^9.1.0",
+    "electron": "^35.0.0",
+    "electron-builder": "^25.1.8",
     "eslint": "^10.2.1",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.5.0",
-    "vite": "^8.0.10"
+    "vite": "^8.0.10",
+    "wait-on": "^8.0.3"
+  },
+  "build": {
+    "appId": "com.mindtrace.aiplus",
+    "productName": "MindTrace AI+",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "public/**/*"
+    ],
+    "win": {
+      "target": ["nsis"],
+      "icon": "public/favicon.svg"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "icon": "public/favicon.svg",
+      "category": "public.app-category.healthcare-fitness"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
   }
 }
